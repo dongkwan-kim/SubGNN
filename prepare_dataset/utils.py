@@ -172,8 +172,9 @@ def plot_roc_ap(y_true, y_pred, save_plots, loss={}, labels=[], multilabel=False
         # Loss
         if len(loss) > 0:
             max_epochs = max([len(l) for k, l in loss.items()])
-            for k, l in loss.items():
-                plt.plot(np.arange(max_epochs), l, label=k)
+            for k, losses in loss.items():
+                losses_cpu = [_l.detach().cpu() for _l in losses]
+                plt.plot(np.arange(max_epochs), losses_cpu, label=k)
             plt.xlabel("Epochs")
             plt.ylabel("Loss")
             plt.xlim([0, max_epochs])
