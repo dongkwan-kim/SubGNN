@@ -4,9 +4,6 @@ import sys
 sys.path.insert(0, '..') # add config to path
 import config as general_config
 
-# Output directory ('density' as an example)
-DATASET_DIR = Path(general_config.PROJECT_ROOT) / "density"
-
 # Flags
 GENERATE_SYNTHETIC_G = True # whether to generate synthetic graph with below specified properties
 GENERATE_NODE_EMB = True # whether to generate node embeddings
@@ -29,6 +26,9 @@ M = 5
 N_BINS = 3
 SUBGRAPH_GENERATOR = "complete"
 MODIFY_GRAPH_FOR_PROPERTIES = True
+
+# Output directory ('density' as an example)
+DATASET_DIR = Path(general_config.PROJECT_ROOT) / DESIRED_PROPERTY.upper()
 
 DENSITY_EPSILON = 0.01
 DENSITY_RANGE = [0.05, 0.25, 0.45]
@@ -56,9 +56,9 @@ POSSIBLE_NUM_STEPS = [32]
 EPOCHS = 100
 
 # Flags for precomputing similarity metrics
-CALCULATE_SHORTEST_PATHS = True # Calculate pairwise shortest paths between all nodes in the graph
-CALCULATE_DEGREE_SEQUENCE = True # Create a dictionary containing degrees of the nodes in the graph
-CALCULATE_EGO_GRAPHS = True # Calculate the 1-hop ego graph associated with each node in the graph
+CALCULATE_SHORTEST_PATHS = False # Calculate pairwise shortest paths between all nodes in the graph
+CALCULATE_DEGREE_SEQUENCE = False # Create a dictionary containing degrees of the nodes in the graph
+CALCULATE_EGO_GRAPHS = False # Calculate the 1-hop ego graph associated with each node in the graph
 OVERRIDE = False # Overwrite a similarity file even if it exists
 N_PROCESSSES = 4 # Number of cores to use for multi-processsing when precomputing similarity metrics
 
