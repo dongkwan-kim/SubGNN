@@ -1,6 +1,7 @@
 import torch
 from torch.nn.parameter import Parameter
 
+
 # All of the below code is taken from AllenAI's AllenNLP library
 
 def tiny_value_of_dtype(dtype: torch.dtype):
@@ -19,8 +20,9 @@ def tiny_value_of_dtype(dtype: torch.dtype):
     else:
         raise TypeError("Does not support dtype " + str(dtype))
 
+
 def masked_softmax(
-    vector: torch.Tensor, mask: torch.BoolTensor, dim: int = -1, memory_efficient: bool = False,
+        vector: torch.Tensor, mask: torch.BoolTensor, dim: int = -1, memory_efficient: bool = False,
 ) -> torch.Tensor:
     """
     `torch.nn.functional.softmax(vector)` does not work if some elements of `vector` should be
@@ -48,13 +50,12 @@ def masked_softmax(
             result = torch.nn.functional.softmax(vector * mask, dim=dim)
             result = result * mask
             result = result / (
-                result.sum(dim=dim, keepdim=True) + tiny_value_of_dtype(result.dtype)
+                    result.sum(dim=dim, keepdim=True) + tiny_value_of_dtype(result.dtype)
             )
         else:
             masked_vector = vector.masked_fill(~mask, min_value_of_dtype(vector.dtype))
             result = torch.nn.functional.softmax(masked_vector, dim=dim)
     return result
-
 
 
 class Attention(torch.nn.Module):
@@ -79,7 +80,7 @@ class Attention(torch.nn.Module):
         self._normalize = normalize
 
     def forward(
-        self, vector: torch.Tensor, matrix: torch.Tensor, matrix_mask: torch.BoolTensor = None
+            self, vector: torch.Tensor, matrix: torch.Tensor, matrix_mask: torch.BoolTensor = None
     ) -> torch.Tensor:
         similarities = self._forward_internal(vector, matrix)
         if self._normalize:
@@ -90,6 +91,7 @@ class Attention(torch.nn.Module):
     def _forward_internal(self, vector: torch.Tensor, matrix: torch.Tensor) -> torch.Tensor:
         raise NotImplementedError
 
+
 class DotProductAttention(Attention):
     """
     Computes attention between a vector and a matrix using dot product.
@@ -98,6 +100,7 @@ class DotProductAttention(Attention):
 
     def _forward_internal(self, vector: torch.Tensor, matrix: torch.Tensor) -> torch.Tensor:
         return matrix.bmm(vector.unsqueeze(-1)).squeeze(-1)
+
 
 class AdditiveAttention(Attention):
     """
@@ -137,4 +140,3 @@ class AdditiveAttention(Attention):
         intermediate = vector.matmul(self._w_matrix).unsqueeze(1) + matrix.matmul(self._u_matrix)
         intermediate = torch.tanh(intermediate)
         return intermediate.matmul(self._v_vector).squeeze(2)
-

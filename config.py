@@ -7,4 +7,3 @@ PROJECT_ROOT = Path('/mnt/nas2/GNN-DATA/SUBGRAPH/')
 
 # padding
 PAD_VALUE = 0
-
