@@ -1,4 +1,7 @@
 {
+    "ff_attn": false,
+    "max_sim_epochs": 5,
+    "embedding_type": "gin",
     "max_epochs": 200,
     "use_neighborhood": true,
     "use_structure": false,
