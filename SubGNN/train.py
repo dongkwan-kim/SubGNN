@@ -212,7 +212,7 @@ def get_paths(args, hyperparameters):
     Returns the paths to data (subgraphs, embeddings, similarity calculations, etc)
     """
     if args.task is not None:
-        path = args.task.replace("_", "").upper() + "/raw"
+        path = args.task
         embedding_type = hyperparameters['embedding_type']
 
         # paths to subgraphs, edge list, and shortest paths between all nodes in the graph
