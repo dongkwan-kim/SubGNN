@@ -942,28 +942,31 @@ class SubGNN(pl.LightningModule):
 
             if split == 'test':
                 if test_np_path.exists() and not self.hparams['compute_similarities']:
-                    print('--- Loading Position Similarities from File ---')
+                    print(f'--- Loading Position Similarities from File {test_np_path} ---')
                     self.test_neigh_pos_similarities = torch.tensor(
                         np.load(test_np_path, allow_pickle=True))  # .to(self.device)
                 else:
+                    print(f'--- Computing Position Similarities to File {test_np_path} ---')
                     self.test_neigh_pos_similarities = self.compute_shortest_path_similarities(test_np_path,
                                                                                                pairwise_shortest_paths,
                                                                                                self.test_cc_ids)
             elif split == 'train_val':
                 if train_np_path.exists() and not self.hparams['compute_similarities']:
-                    print('--- Loading Train Position Similarities from File ---')
+                    print(f'--- Loading Train Position Similarities from File {train_np_path} ---')
                     self.train_neigh_pos_similarities = torch.tensor(
                         np.load(train_np_path, allow_pickle=True))  # .to(self.device)
                 else:
+                    print(f'--- Computing Train Position Similarities to File {train_np_path} ---')
                     self.train_neigh_pos_similarities = self.compute_shortest_path_similarities(train_np_path,
                                                                                                 pairwise_shortest_paths,
                                                                                                 self.train_cc_ids)
 
                 if val_np_path.exists() and not self.hparams['compute_similarities']:
-                    print('--- Loading Val Position Similarities from File ---')
+                    print(f'--- Loading Val Position Similarities from File {val_np_path} ---')
                     self.val_neigh_pos_similarities = torch.tensor(
                         np.load(val_np_path, allow_pickle=True))  # .to(self.device)
                 else:
+                    print(f'---  Computing Position Similarities to File {val_np_path} ---')
                     self.val_neigh_pos_similarities = self.compute_shortest_path_similarities(val_np_path,
                                                                                               pairwise_shortest_paths,
                                                                                               self.val_cc_ids)
@@ -992,8 +995,10 @@ class SubGNN(pl.LightningModule):
                     'structure_patch_type'] + '_' + str(self.hparams['max_sim_epochs']) + '.npy')
 
             if struc_anchor_patches_path.exists() and not self.hparams['compute_similarities']:
+                print(f'--- Loading struc_anchor_patches from File {struc_anchor_patches_path} ---')
                 self.structure_anchors = torch.tensor(np.load(struc_anchor_patches_path, allow_pickle=True))
             else:
+                print(f'--- Computing struc_anchor_patches to File {struc_anchor_patches_path}  ---')
                 self.structure_anchors = sample_structure_anchor_patches(self.hparams, self.networkx_graph, self.device,
                                                                          self.hparams['max_sim_epochs'])
                 np.save(struc_anchor_patches_path, self.structure_anchors.cpu().numpy())
@@ -1007,9 +1012,11 @@ class SubGNN(pl.LightningModule):
                             'structure_patch_type'] + '_' + str(self.hparams['max_sim_epochs']) + '.npy')
 
             if bor_struc_patch_random_walks_path.exists() and not self.hparams['compute_similarities']:
+                print(f'--- Loading bor_struc_patch_random_walks_path from File {bor_struc_patch_random_walks_path} ---')
                 self.bor_structure_anchor_random_walks = torch.tensor(
                     np.load(bor_struc_patch_random_walks_path, allow_pickle=True))  # .to(self.device)
             else:
+                print(f'--- Computing bor_struc_patch_random_walks_path to File {bor_struc_patch_random_walks_path} ---')
                 self.bor_structure_anchor_random_walks = perform_random_walks(self.hparams, self.networkx_graph,
                                                                               self.structure_anchors, inside=False)
                 np.save(bor_struc_patch_random_walks_path, self.bor_structure_anchor_random_walks.cpu().numpy())
@@ -1021,9 +1028,11 @@ class SubGNN(pl.LightningModule):
                             'structure_patch_type'] + '_' + str(self.hparams['max_sim_epochs']) + '.npy')
 
             if int_struc_patch_random_walks_path.exists() and not self.hparams['compute_similarities']:
+                print(f'--- Loading int_struc_patch_random_walks_path from File {int_struc_patch_random_walks_path} ---')
                 self.int_structure_anchor_random_walks = torch.tensor(
                     np.load(int_struc_patch_random_walks_path, allow_pickle=True))  # .to(self.device)
             else:
+                print(f'--- Computing int_struc_patch_random_walks_path to File {int_struc_patch_random_walks_path} ---')
                 self.int_structure_anchor_random_walks = perform_random_walks(self.hparams, self.networkx_graph,
                                                                               self.structure_anchors, inside=True)
                 np.save(int_struc_patch_random_walks_path, self.int_structure_anchor_random_walks.cpu().numpy())
@@ -1054,10 +1063,11 @@ class SubGNN(pl.LightningModule):
 
             if split == 'test':
                 if test_int_struc_path.exists() and not self.hparams['compute_similarities']:
-                    print('--- Loading Test Structure Similarities from File ---', flush=True)
+                    print(f'--- Loading Test Structure Similarities from File {test_int_struc_path} ---', flush=True)
                     self.test_int_struc_similarities = torch.tensor(
                         np.load(test_int_struc_path, allow_pickle=True))  # .to(self.device)
                 else:
+                    print(f'--- Computing Test Structure Similarities to File {test_int_struc_path} ---', flush=True)
                     self.test_int_struc_similarities = self.compute_structure_patch_similarities(degree_dict,
                                                                                                  test_int_struc_path,
                                                                                                  True, self.test_cc_ids,
@@ -1066,10 +1076,11 @@ class SubGNN(pl.LightningModule):
 
             elif split == 'train_val':
                 if train_int_struc_path.exists() and not self.hparams['compute_similarities']:
-                    print('--- Loading Train Structure Similarities from File ---', flush=True)
+                    print(f'--- Loading Train Structure Similarities from File {train_int_struc_path} ---', flush=True)
                     self.train_int_struc_similarities = torch.tensor(
                         np.load(train_int_struc_path, allow_pickle=True))  # .to(self.device)
                 else:
+                    print(f'--- Computing Train Structure Similarities to File {train_int_struc_path} ---', flush=True)
                     self.train_int_struc_similarities = self.compute_structure_patch_similarities(degree_dict,
                                                                                                   train_int_struc_path,
                                                                                                   True,
@@ -1078,10 +1089,11 @@ class SubGNN(pl.LightningModule):
                                                                                                   self.train_N_border)
 
                 if val_int_struc_path.exists() and not self.hparams['compute_similarities']:
-                    print('--- Loading Val Structure Similarities from File ---', flush=True)
+                    print(f'--- Loading Val Structure Similarities from File {val_int_struc_path} ---', flush=True)
                     self.val_int_struc_similarities = torch.tensor(
                         np.load(val_int_struc_path, allow_pickle=True))  # .to(self.device)
                 else:
+                    print(f'--- Computing Val Structure Similarities to File {val_int_struc_path} ---', flush=True)
                     self.val_int_struc_similarities = self.compute_structure_patch_similarities(degree_dict,
                                                                                                 val_int_struc_path,
                                                                                                 True, self.val_cc_ids,
@@ -1095,9 +1107,10 @@ class SubGNN(pl.LightningModule):
 
             if split == 'test':
                 if test_bor_struc_path.exists() and not self.hparams['compute_similarities']:
-                    print('--- Loading Test Structure Similarities from File ---')
+                    print(f'--- Loading Test Structure Similarities from File {test_bor_struc_path} ---')
                     self.test_bor_struc_similarities = torch.tensor(np.load(test_bor_struc_path, allow_pickle=True))
                 else:
+                    print(f'--- Computing Test Structure Similarities to File {test_bor_struc_path} ---')
                     self.test_bor_struc_similarities = self.compute_structure_patch_similarities(degree_dict,
                                                                                                  test_bor_struc_path,
                                                                                                  False,
@@ -1107,9 +1120,10 @@ class SubGNN(pl.LightningModule):
 
             if split == 'train_val':
                 if train_bor_struc_path.exists() and not self.hparams['compute_similarities']:
-                    print('--- Loading Train Structure Similarities from File ---')
+                    print(f'--- Loading Train Structure Similarities from File {train_bor_struc_path} ---')
                     self.train_bor_struc_similarities = torch.tensor(np.load(train_bor_struc_path, allow_pickle=True))
                 else:
+                    print(f'--- Computing Train Structure Similarities to File {train_bor_struc_path} ---')
                     self.train_bor_struc_similarities = self.compute_structure_patch_similarities(degree_dict,
                                                                                                   train_bor_struc_path,
                                                                                                   False,
@@ -1118,9 +1132,10 @@ class SubGNN(pl.LightningModule):
                                                                                                   self.train_N_border)
 
                 if val_bor_struc_path.exists() and not self.hparams['compute_similarities']:
-                    print('--- Loading Val Structure Similarities from File ---')
+                    print(f'--- Loading Val Structure Similarities from File {val_bor_struc_path} ---')
                     self.val_bor_struc_similarities = torch.tensor(np.load(val_bor_struc_path, allow_pickle=True))
                 else:
+                    print(f'--- Computing Val Structure Similarities to File {val_bor_struc_path} ---')
                     self.val_bor_struc_similarities = self.compute_structure_patch_similarities(degree_dict,
                                                                                                 val_bor_struc_path,
                                                                                                 False, self.val_cc_ids,
