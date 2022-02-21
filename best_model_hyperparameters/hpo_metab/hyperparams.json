@@ -1,4 +1,6 @@
 {
+    "max_sim_epochs": 5,
+    "embedding_type": "gin",
     "max_epochs": 200,
     "use_neighborhood": false,
     "use_structure": true,
