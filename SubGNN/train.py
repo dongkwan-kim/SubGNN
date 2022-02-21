@@ -212,24 +212,24 @@ def get_paths(args, hyperparameters):
     Returns the paths to data (subgraphs, embeddings, similarity calculations, etc)
     """
     if args.task is not None:
-        task = args.task
+        path = args.task.replace("_", "").upper() + "/raw"
         embedding_type = hyperparameters['embedding_type']
 
         # paths to subgraphs, edge list, and shortest paths between all nodes in the graph
-        subgraphs_path = os.path.join(task, "subgraphs.pth")
-        graph_path = os.path.join(task, "edge_list.txt")
-        shortest_paths_path = os.path.join(task, "shortest_path_matrix.npy")
-        degree_sequence_path = os.path.join(task, "degree_sequence.txt")
-        ego_graph_path = os.path.join(task, "ego_graphs.txt")
+        subgraphs_path = os.path.join(path, "subgraphs.pth")
+        graph_path = os.path.join(path, "edge_list.txt")
+        shortest_paths_path = os.path.join(path, "shortest_path_matrix.npy")
+        degree_sequence_path = os.path.join(path, "degree_sequence.txt")
+        ego_graph_path = os.path.join(path, "ego_graphs.txt")
 
         # directory where similarity calculations will be stored
-        similarities_path = os.path.join(task, "similarities/")
+        similarities_path = os.path.join(path, "similarities/")
 
         # get location of node embeddings
         if embedding_type == 'gin':
-            embedding_path = os.path.join(task, "gin_embeddings.pth")
+            embedding_path = os.path.join(path, "gin_embeddings.pth")
         elif embedding_type == 'graphsaint':
-            embedding_path = os.path.join(task, "graphsaint_gcn_embeddings.pth")
+            embedding_path = os.path.join(path, "graphsaint_gcn_embeddings.pth")
         else:
             raise NotImplementedError
 
