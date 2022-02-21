@@ -171,7 +171,7 @@ dependencies:
     - pytest==5.4.2
     - pytest-cov==2.9.0
     - python-editor==1.0.4
-    - python-graphviz==0.14
+    - graphviz==0.14
     - pytorch-crf==0.7.0
     - pytorch-lightning==0.7.1
     - pywavelets==1.1.1
@@ -200,7 +200,7 @@ dependencies:
     - terminado==0.8.3
     - testpath==0.4.4
     - tokenizers==0.8.1rc1
-    - torch==1.0.0
+    - torch==1.4.0
     - torch-cluster==1.5.4
     - torch-geometric==1.6.1
     - torch-scatter==2.0.4
