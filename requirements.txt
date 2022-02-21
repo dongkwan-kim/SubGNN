@@ -13,6 +13,7 @@ cmd2==2.3.3
 colorlog==6.6.0
 cycler==0.11.0
 dataclasses==0.6
+fastdtw==0.3.4
 fonttools==4.28.3
 future==0.18.2
 google-auth==2.3.3
