@@ -377,7 +377,7 @@ def build_trainer(args, hyperparameters, trial=None):
     if args.use_timer:
         from utils_pl import OldTimerCallback
         cprint(f"Set-up {OldTimerCallback.__class__.__name__}", "green")
-        stop_epochs = 5  # todo
+        stop_epochs = 50  # todo
         trainer_kwargs["callbacks"] = [OldTimerCallback(stop_epochs=stop_epochs)]
 
     trainer = pl.Trainer(**trainer_kwargs)
