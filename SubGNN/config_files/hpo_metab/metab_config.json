@@ -11,7 +11,7 @@
        
     },
     "optuna":{
-        "opt_n_trials" : 2,
+        "opt_n_trials" : 50,
         "opt_n_cores" : 1,
         "monitor_metric" : "val_micro_f1",
         "opt_direction" : "maximize" ,
