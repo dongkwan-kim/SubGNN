@@ -84,7 +84,7 @@ class OldTimerCallback(Callback):
             cprint(f"- time / valid_batch: {dt_valid_batch}", "yellow")
 
             cprint("Summary as Table ------------------", "yellow")
-            print("\n".join(str(t) for t in [
+            print("\t".join(str(t) for t in [
                 dt_init_start,
                 self.total_epoch_count,
                 total_train_time, dt_train_epoch, dt_train_batch,
