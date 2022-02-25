@@ -15,6 +15,7 @@ import string
 
 # Pytorch
 import torch
+from termcolor import cprint
 from torch.utils.data import DataLoader
 from torch.nn.functional import one_hot
 import pytorch_lightning as pl
@@ -97,6 +98,9 @@ def parse_arguments():
     # Test set
     parser.add_argument('-runTest', action='store_true', help='Run on the test set')
     parser.add_argument('-noTrain', action='store_true', help='No training')
+
+    # Timer
+    parser.add_argument('-use_timer', action='store_true', help='Use timer')
 
     args = parser.parse_args()
     return args
@@ -370,6 +374,12 @@ def build_trainer(args, hyperparameters, trial=None):
     if not torch.cuda.is_available():
         trainer_kwargs['gpus'] = 0
 
+    if args.use_timer:
+        from utils_pl import OldTimerCallback
+        cprint(f"Set-up {OldTimerCallback.__class__.__name__}", "green")
+        stop_epochs = 5  # todo
+        trainer_kwargs["callbacks"] = [OldTimerCallback(stop_epochs=stop_epochs)]
+
     trainer = pl.Trainer(**trainer_kwargs)
 
     return trainer, trainer_kwargs, results_path
@@ -392,8 +402,10 @@ def train_model(args, trial=None):
         hparam_file.close()
 
         tkwarg_file = open(os.path.join(results_path, "trainer_kwargs.json"), "w")
-        pop_keys = [key for key in ['logger', 'profiler', 'early_stop_callback', 'checkpoint_callback'] if
-                    key in trainer_kwargs.keys()]
+        pop_keys = [
+            key for key in ['logger', 'profiler', 'early_stop_callback', 'checkpoint_callback', "callbacks"]
+            if key in trainer_kwargs.keys()
+        ]
         [trainer_kwargs.pop(key) for key in pop_keys]
         tkwarg_file.write(json.dumps(trainer_kwargs, indent=4))
         tkwarg_file.close()

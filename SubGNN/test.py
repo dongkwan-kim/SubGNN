@@ -25,6 +25,10 @@ def parse_arguments():
                         help="Use random seeds from 0-9. Otherwise use random random seeds")
     parser.add_argument('-tb_dir', default="tensorboard_test", type=str)
     parser.add_argument('-no_train', action="store_true")
+
+    # Timer
+    parser.add_argument('-use_timer', action='store_true', help='Use timer')
+
     args = parser.parse_args()
     return args
 
@@ -36,6 +40,7 @@ def main(args_script):
         "restoreModelPath": args_script.restoreModelPath,
         "max_epochs": args_script.max_epochs,
         "tb_dir": args_script.tb_dir,
+        "use_timer": args_script.use_timer,
 
         ## Defaults
         "checkpoint_k": 1,
