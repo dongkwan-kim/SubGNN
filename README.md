@@ -33,6 +33,7 @@ To train SubGNN, you should first specify your project directory via `PROJECT_RO
 ```
 cd SubGNN
 python train_config.py -config_path config_files/hpo_metab/metab_config.json
+python train_config.py -config_path config_files/em_user/em_config.json
 ```
 
 The model and asssociated hyperparameters will be saved in the tensorboard directory specified by `tb_dir` and `tb_name` in the config file. We use the `hpo_metab` dataset as as example, but you can easily run any of the datasets by passing in the appropriate config file. Note that, while you can also train the model via `train.py`, we highly recommend using `train_config.py` instead.
@@ -58,7 +59,7 @@ Note that the `restoreModelPath` directory should contain a `.ckpt` file and a `
 
 You can also evaluate the model on a single random seed. You can use `train.py` with the `-noTrain` and `-runTest` flags to restore a specific model and evaluate on test data. The results will be printed to the console.
 
-```
+```bash
 cd SubGNN
 python train.py \
 -task hpo_metab \
@@ -67,6 +68,20 @@ python train.py \
 -no_save \ 
 -restoreModelPath PATH/TO/SAVED/MODEL \ 
 -restoreModelName CHECKPOINT_FILE_NAME.ckpt
+
+# examples
+python test.py -task hpo_neuro -restoreModelPath ../best_model_hyperparameters/hpo_neuro
+python test.py -task hpo_metab -restoreModelPath ../best_model_hyperparameters/hpo_metab
+python test.py -task em_user -restoreModelPath ../../SubGNN_data/tensorboard/S_em_optuna/version_9432488
+```
+
+
+### To measure efficiency (time, memory)
+See `utils_pl.py`.
+```bash
+python test.py -task hpo_neuro -restoreModelPath ../best_model_hyperparameters/hpo_neuro -use_timer
+python test.py -task hpo_metab -restoreModelPath ../best_model_hyperparameters/hpo_metab -use_timer
+python test.py -task em_user -restoreModelPath ../../SubGNN_data/tensorboard/S_em_optuna/version_9432488 -use_timer
 ```
 
 ## How to Cite
