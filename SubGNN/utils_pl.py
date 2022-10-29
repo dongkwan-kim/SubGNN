@@ -4,11 +4,17 @@ from pytorch_lightning import Trainer
 from pytorch_lightning.callbacks import Callback
 from termcolor import cprint
 import numpy as np
+import torch
+import torch.nn as nn
 
 
-class OldTimerCallback(Callback):
+def count_parameters(model: nn.Module):
+    return sum(p.numel() for p in model.parameters() if p.requires_grad)
+
+
+class EfficiencyCallbackBC(Callback):
     """
-    TimerCallback compatible to pytorch-lightning v0.7.1
+    EfficiencyCallback backward-compatible to pytorch-lightning v0.7.1
     https://pytorch-lightning.readthedocs.io/en/0.7.1/callbacks.html
     """
     time_init_start = None
@@ -29,7 +35,7 @@ class OldTimerCallback(Callback):
     stage = None
 
     def __init__(self, stop_epochs=5):
-        super(OldTimerCallback, self).__init__()
+        super(EfficiencyCallbackBC, self).__init__()
         self.stop_epochs = stop_epochs
 
     def on_init_start(self, trainer):
@@ -56,7 +62,7 @@ class OldTimerCallback(Callback):
         self.on_validation_epoch_end(trainer, pl_module)
 
         if self.total_epoch_count == self.stop_epochs:
-
+            # Time for throughput & latency
             total_end = time.time()
             dt_init_start = total_end - self.time_init_start
             # dt_fit_start = total_end - self.time_fit_start
@@ -83,10 +89,15 @@ class OldTimerCallback(Callback):
             cprint(f"- time / valid_epoch: {dt_valid_epoch}", "yellow")
             cprint(f"- time / valid_batch: {dt_valid_batch}", "yellow")
 
-            cprint("Summary as Table ------------------", "yellow")
+            # Memory and parameters
+            num_parameters = count_parameters(pl_module)
+            # torch.cuda.memory_cached has been renamed to torch.cuda.memory_reserved
+            max_memory_reserved = torch.cuda.memory_cached()
+            max_memory_allocated = torch.cuda.max_memory_allocated()
+            cprint(f"\nSummary as Table --- {pl_module.h.subname}", "yellow")
             print("\t".join(str(t) for t in [
-                dt_init_start,
-                self.total_epoch_count,
+                num_parameters, max_memory_reserved, max_memory_allocated,
+                dt_init_start, self.total_epoch_count,
                 total_train_time, dt_train_epoch, dt_train_batch,
                 total_valid_time, dt_valid_epoch, dt_valid_batch,
             ]))

@@ -79,9 +79,9 @@ python test.py -task em_user -restoreModelPath ../../SubGNN_data/tensorboard/S_e
 ### To measure efficiency (time, memory)
 See `utils_pl.py`.
 ```bash
-python test.py -task hpo_neuro -restoreModelPath ../best_model_hyperparameters/hpo_neuro -use_timer
-python test.py -task hpo_metab -restoreModelPath ../best_model_hyperparameters/hpo_metab -use_timer
-python test.py -task em_user -restoreModelPath ../../SubGNN_data/tensorboard/S_em_optuna/version_9432488 -use_timer
+python test.py -task hpo_neuro -restoreModelPath ../best_model_hyperparameters/hpo_neuro -compute_efficiency
+python test.py -task hpo_metab -restoreModelPath ../best_model_hyperparameters/hpo_metab -compute_efficiency
+python test.py -task em_user -restoreModelPath ../../SubGNN_data/tensorboard/S_em_optuna/version_9432488 -compute_efficiency
 ```
 
 ## How to Cite

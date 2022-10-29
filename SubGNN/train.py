@@ -99,8 +99,8 @@ def parse_arguments():
     parser.add_argument('-runTest', action='store_true', help='Run on the test set')
     parser.add_argument('-noTrain', action='store_true', help='No training')
 
-    # Timer
-    parser.add_argument('-use_timer', action='store_true', help='Use timer')
+    # Efficiency
+    parser.add_argument('-compute_efficiency', action='store_true', help='Compute efficiency')
 
     args = parser.parse_args()
     return args
@@ -374,11 +374,11 @@ def build_trainer(args, hyperparameters, trial=None):
     if not torch.cuda.is_available():
         trainer_kwargs['gpus'] = 0
 
-    if args.use_timer:
-        from utils_pl import OldTimerCallback
-        cprint(f"Set-up {OldTimerCallback.__class__.__name__}", "green")
+    if args.compute_efficiency:
+        from utils_pl import EfficiencyCallbackBC
+        cprint(f"Set-up {EfficiencyCallbackBC.__class__.__name__}", "green")
         stop_epochs = 50  # todo
-        trainer_kwargs["callbacks"] = [OldTimerCallback(stop_epochs=stop_epochs)]
+        trainer_kwargs["callbacks"] = [EfficiencyCallbackBC(stop_epochs=stop_epochs)]
 
     trainer = pl.Trainer(**trainer_kwargs)
 
